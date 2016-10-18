@@ -1,0 +1,22 @@
+DeafCraft Configuration:
+    Notification message: "%MONSTER% &2targets you"
+    Use Permissions: true
+    Monster Color:
+        Blaze: Yellow
+        Creeper: Green
+        Cave Spider: Dark Gray
+        Ender Dragon: Dark Purple
+        Enderman: Dark Purple
+        Endermite: Pink
+        Ghast: White
+        Guardian: Dark Aqua
+        Magma Cube: Dark Red
+        Pig Zombie: Red
+        Shulker: Gold
+        Silverfish: Gray
+        Skeleton: White
+        Slime: Dark Green
+        Spider: Dark Gray
+        Witch: Aqua
+        Wither: Dark Gray
+        Zombie: Dark Green
