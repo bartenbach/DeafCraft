@@ -4,7 +4,7 @@ package net.alureon.deafcraft.util;
 import net.alureon.deafcraft.DeafCraft;
 import net.alureon.deafcraft.file.Config;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Monster;
+import org.bukkit.entity.LivingEntity;
 
 
 public class MonsterColor {
@@ -18,7 +18,7 @@ public class MonsterColor {
     }
 
 
-    public static ChatColor getMonsterColor(Monster monster) {
+    public static ChatColor getMonsterColor(LivingEntity monster) {
         switch (monster.getType()) {
             case CREEPER:
                 return ChatColor.valueOf(dc.getConfig().getString(Config.creeperColor).toUpperCase().replace(" ", "_"));

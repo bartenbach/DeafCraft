@@ -5,6 +5,8 @@ import net.alureon.deafcraft.util.MonsterColor;
 import net.alureon.deafcraft.util.MonsterName;
 import net.alureon.deafcraft.file.ConfigurationFile;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,22 +28,32 @@ public class EntityTargetListener implements Listener {
         this.cf = cf;
     }
 
+
+    //TODO ghast not working, magma cube not working
     @EventHandler
     public void onMonsterTarget(final EntityTargetLivingEntityEvent event) {
-        if (event.getTarget() instanceof Player && event.getEntity() instanceof Monster) {
-            final Player player = (Player) event.getTarget();
-            final Monster monster = (Monster) event.getEntity();
 
-            if (player.hasPermission("deafcraft.notify")) {
-                if (event.getReason() == EntityTargetEvent.TargetReason.REINFORCEMENT_TARGET) {
-                    System.out.println("Reinforcement called");
+        // Most monsters are instanceof Monster, except like four...those don't count for some reason
+        if ((event.getTarget() instanceof Player) && (event.getEntity() instanceof Monster
+                || event.getEntity().getType() == EntityType.GHAST
+                || event.getEntity().getType() == EntityType.MAGMA_CUBE
+                || event.getEntity().getType() == EntityType.SHULKER
+                || event.getEntity().getType() == EntityType.SLIME)) {
+            final Player player = (Player) event.getTarget();
+            final LivingEntity monster = (LivingEntity) event.getEntity();
+
+            // check if either they have the permission or we're not using permissions at all
+            if (player.hasPermission("deafcraft.notify") || !cf.getUsePermissions()) {
+                if (event.getReason() == EntityTargetEvent.TargetReason.TARGET_ATTACKED_NEARBY_ENTITY) {
+                    dc.getNearbyEntityHandler().addNearbyAlertedEntity(player, monster);
+                } else {
+                    checkEntitymap(player, monster);
                 }
-                checkEntitymap(player, monster);
             }
         }
     }
 
-    private void checkEntitymap(Player player, Monster monster) {
+    private void checkEntitymap(Player player, LivingEntity monster) {
         //System.out.println(monster.getUniqueId());
         if (dc.getEntityMapHandler().getPlayerEntityMap(player).containsKey(monster.getUniqueId())) {
             if ((new Date().getTime() - 20000) > dc.getEntityMapHandler().getPlayerEntityMap(player).get(monster.getUniqueId()).getTime()) {
@@ -56,7 +68,7 @@ public class EntityTargetListener implements Listener {
         }
     }
 
-    private void sendNotification(Player player, Monster monster, ChatColor monstercolor) {
+    private void sendNotification(Player player, LivingEntity monster, ChatColor monstercolor) {
         StringBuilder sb = new StringBuilder();
         sb.append(monstercolor);
         sb.append(cf.getNotificationMessage().replace("%MONSTER%", MonsterName.getMonsterName(monster)));

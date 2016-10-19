@@ -18,12 +18,12 @@ public class EntityDeathListener implements Listener {
     }
 
 
+    // Tested - works great
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
         for (Player p : dc.getServer().getOnlinePlayers()) {
             if (dc.getEntityMapHandler().getPlayerEntityMap(p).containsKey(event.getEntity().getUniqueId())) {
                 dc.getEntityMapHandler().getPlayerEntityMap(p).remove(event.getEntity().getUniqueId());
-                System.out.println("Removed entity " + event.getEntity().getUniqueId());
             }
         }
     }

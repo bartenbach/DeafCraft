@@ -2,13 +2,13 @@ package net.alureon.deafcraft.util;
 
 
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.entity.Monster;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Zombie;
 
 public class MonsterName {
 
 
-    public static String getMonsterName(Monster monster) {
+    public static String getMonsterName(LivingEntity monster) {
         StringBuilder sb = new StringBuilder();
         switch (monster.getType()) {
             case ZOMBIE:
