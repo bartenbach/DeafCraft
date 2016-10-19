@@ -9,6 +9,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 
 import java.util.Date;
@@ -32,17 +33,21 @@ public class EntityTargetListener implements Listener {
             final Monster monster = (Monster) event.getEntity();
 
             if (player.hasPermission("deafcraft.notify")) {
+                if (event.getReason() == EntityTargetEvent.TargetReason.REINFORCEMENT_TARGET) {
+                    System.out.println("Reinforcement called");
+                }
                 checkEntitymap(player, monster);
             }
         }
     }
 
     private void checkEntitymap(Player player, Monster monster) {
+        //System.out.println(monster.getUniqueId());
         if (dc.getEntityMapHandler().getPlayerEntityMap(player).containsKey(monster.getUniqueId())) {
-            if ((new Date().getTime() - 10000) > dc.getEntityMapHandler().getPlayerEntityMap(player).get(monster.getUniqueId()).getTime()) {
+            if ((new Date().getTime() - 20000) > dc.getEntityMapHandler().getPlayerEntityMap(player).get(monster.getUniqueId()).getTime()) {
+                dc.getEntityMapHandler().getPlayerEntityMap(player).put(monster.getUniqueId(), new Date());
                 ChatColor monsterColor = MonsterColor.getMonsterColor(monster);
                 sendNotification(player, monster, monsterColor);
-                dc.getEntityMapHandler().getPlayerEntityMap(player).put(monster.getUniqueId(), new Date());
             }
         } else {
             dc.getEntityMapHandler().addEntityToMap(player, monster.getUniqueId());

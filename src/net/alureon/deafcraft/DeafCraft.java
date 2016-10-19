@@ -1,6 +1,7 @@
 package net.alureon.deafcraft;
 
 import net.alureon.deafcraft.handler.EntityMapHandler;
+import net.alureon.deafcraft.listeners.EntityDeathListener;
 import net.alureon.deafcraft.listeners.EntityTargetListener;
 import net.alureon.deafcraft.file.ConfigurationFile;
 import net.alureon.deafcraft.listeners.PlayerJoinListener;
@@ -16,6 +17,7 @@ public class DeafCraft extends JavaPlugin {
     private final EntityMapHandler entityMapHandler = new EntityMapHandler();
     private final EntityTargetListener entityTargetListener = new EntityTargetListener(this, configurationFile);
     private final PlayerJoinListener playerJoinListener = new PlayerJoinListener(this);
+    private final EntityDeathListener entityDeathListener = new EntityDeathListener(this);
 
 
     @Override
@@ -28,6 +30,7 @@ public class DeafCraft extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(entityTargetListener, this);
         pm.registerEvents(playerJoinListener, this);
+        pm.registerEvents(entityDeathListener, this);
     }
 
     public EntityMapHandler getEntityMapHandler() {
