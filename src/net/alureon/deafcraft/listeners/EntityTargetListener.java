@@ -29,7 +29,6 @@ public class EntityTargetListener implements Listener {
     }
 
 
-    //TODO ghast not working, magma cube not working
     @EventHandler
     public void onMonsterTarget(final EntityTargetLivingEntityEvent event) {
 

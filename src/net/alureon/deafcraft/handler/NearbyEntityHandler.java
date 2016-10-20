@@ -6,6 +6,7 @@ import net.alureon.deafcraft.thread.NearbyEntityThread;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
@@ -13,8 +14,7 @@ import java.util.UUID;
 public class NearbyEntityHandler {
 
 
-    // the date objects aren't currently being used for this construct and could be removed
-    private HashMap<Player, HashMap<UUID, Date>> nearbyEntityMap = new HashMap<Player, HashMap<UUID, Date>>();
+    private HashMap<Player, ArrayList<UUID>> nearbyEntityMap = new HashMap<Player, ArrayList<UUID>>();
     private DeafCraft dc;
 
 
@@ -34,25 +34,24 @@ public class NearbyEntityHandler {
 
         // if the player doesn't have a nearby entity map, create one and add the nearby entity
         // this also starts the thread that will collect other nearby entities
-        if (nearbyEntityMap.get(player) == null) {
-            HashMap<UUID, Date> entityMap = new HashMap<UUID, Date>();
-            entityMap.put(monster.getUniqueId(), new Date());
-            nearbyEntityMap.put(player, entityMap);
-            NearbyEntityThread nearbyEntityThread = new NearbyEntityThread(dc, player, monster);
-            nearbyEntityThread.run();
+        if (!nearbyEntityMap.containsKey(player)) {
+            ArrayList<UUID> entityList = new ArrayList<UUID>();
+            entityList.add(monster.getUniqueId());
+            nearbyEntityMap.put(player, entityList);
+            new Thread(new NearbyEntityThread(dc, player, monster)).start();
 
-        // if a nearby entity map was already created, add the new nearby entity to the map
+
+        // if a nearby entity map was already created, add the new nearby entity to the list
         } else {
-            HashMap<UUID, Date> entityMap = nearbyEntityMap.get(player);
-            entityMap.put(monster.getUniqueId(), new Date());
+            nearbyEntityMap.get(player).add(monster.getUniqueId());
         }
     }
 
-    public HashMap<UUID, Date> getNearbyEntityMap(Player player) {
+    public ArrayList<UUID> getNearbyEntityList(Player player) {
         return nearbyEntityMap.get(player);
     }
 
-    public void deleteMap(Player player) {
+    public void removePlayerFromMap(Player player) {
         nearbyEntityMap.remove(player);
     }
 

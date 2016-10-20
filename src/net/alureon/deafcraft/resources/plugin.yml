@@ -1,7 +1,7 @@
 name: DeafCraft
 main: net.alureon.deafcraft.DeafCraft
 author: alureon
-version: 0.0.1
+version: 0.0.2
 description: Notifies players when monsters have targeted them.
 permissions:
     deafcraft.notify:

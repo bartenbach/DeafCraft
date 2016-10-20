@@ -8,7 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 
-public class NearbyEntityThread extends Thread {
+public class NearbyEntityThread implements Runnable {
 
 
     private DeafCraft dc;
@@ -27,13 +27,14 @@ public class NearbyEntityThread extends Thread {
     public void run() {
         while (!exit) {
             try {
-                // sleep for half a second to collect additional nearby entities before announcing
-                Thread.sleep(500);
+                // sleep and wait for list to populate
+                Thread.sleep(1000);
 
-                int monsters = dc.getNearbyEntityHandler().getNearbyEntityMap(player).size();
+                int monsters = dc.getNearbyEntityHandler().getNearbyEntityList(player).size();
+
                 player.sendMessage(MonsterColor.getMonsterColor(monster) + MonsterName.getMonsterName(monster) +
                 " alerted " + monsters + " nearby " + getReinforcementString(monsters));
-                dc.getNearbyEntityHandler().deleteMap(player);
+                dc.getNearbyEntityHandler().removePlayerFromMap(player);
 
                 // kill this thread
                 exit = true;
@@ -41,7 +42,7 @@ public class NearbyEntityThread extends Thread {
         }
     }
 
-    public String getReinforcementString(int reinforcements) {
+    private String getReinforcementString(int reinforcements) {
         if (reinforcements > 1) {
             return "enemies";
         } else {
