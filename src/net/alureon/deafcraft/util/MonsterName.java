@@ -41,7 +41,7 @@ public class MonsterName {
                 }
                 break;
             default:
-                sb.append(WordUtils.capitalizeFully(monster.getName().toLowerCase().replace("_", " ")));
+                sb.append(WordUtils.capitalizeFully(monster.getType().name().toLowerCase().replace("_", " ")));
                 break;
         }
         return sb.toString();
